@@ -1,0 +1,55 @@
+<div class="min-h-dvh bg-base text-ink">
+  <header class="sticky top-0 z-20 border-b border-line bg-nav">
+    <div class="mx-auto flex h-14 max-w-4xl items-center gap-3 px-4">
+      <a routerLink="/app/dashboard" class="flex shrink-0 items-center gap-2" aria-label="DEAD! Legal home">
+        <span class="text-lg font-bold tracking-tight">Anubis</span>
+        <span class="brand-mark brand-mark-teal">Legal</span>
+      </a>
+      <div class="min-w-0 flex-1 overflow-x-auto">
+        <nav aria-label="Primary" class="flex w-max min-w-full justify-end gap-0.5">
+        @for (item of nav; track item.path) {
+          <a
+            [routerLink]="item.path"
+            routerLinkActive="nav-on"
+            ariaCurrentWhenActive="page"
+            [title]="item.label"
+            class="study-nav-link"
+            [class.nav-feature]="item.featured"
+            #link="routerLinkActive"
+          >
+            <ui-icon [name]="item.icon" [size]="15" [stroke]="2.25" />
+            <span [class]="item.featured ? '' : 'hidden md:inline'">{{ item.label }}</span>
+            @if (item.featured && !link.isActive) {
+              <span class="new-badge">NEW</span>
+            }
+          </a>
+        }
+        </nav>
+      </div>
+      <span class="state-chip" title="Your state (set at signup)">
+        <ui-icon name="map-pin" [size]="12" class="text-primary" />
+        {{ account.current()?.stateCode }}
+      </span>
+      <button
+        type="button"
+        class="icon-btn shrink-0"
+        [attr.aria-label]="theme.mode() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+        (click)="theme.toggle()"
+      >
+        <ui-icon [name]="theme.mode() === 'dark' ? 'sun' : 'moon'" [size]="15" />
+      </button>
+      <button type="button" class="icon-btn shrink-0 text-dim" aria-label="Sign out" title="Sign out" (click)="signOut()">
+        <ui-icon name="log-out" [size]="15" />
+      </button>
+    </div>
+  </header>
+
+  <div id="main" tabindex="-1" class="mx-auto max-w-4xl px-4 py-6">
+    <router-outlet />
+  </div>
+
+  <footer class="mx-auto mt-4 flex max-w-4xl items-center justify-between border-t border-line px-4 py-6 text-[11px] text-dim">
+    <span class="font-mono">DEAD! LEGAL · NC EDITION · PROTOTYPE</span>
+    <span>© 2026 Anubis Publications DBA DEAD!</span>
+  </footer>
+</div>

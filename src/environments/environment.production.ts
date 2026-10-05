@@ -2,7 +2,7 @@ import { publicUrls } from './public-urls';
 
 export const environment = {
   production: true,
-  appName: 'Dead-2',
+  appName: 'Anubis Legal',
   apiBase: '/api',
   publicUrls,
 };

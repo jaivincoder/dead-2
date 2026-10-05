@@ -27,7 +27,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           tokens.clear();
           toasts.error('Session expired');
           const current = router.url.split('?')[0];
-          void router.navigate(['/'], {
+          void router.navigate(['/login'], {
             queryParams: current && current !== '/' ? { returnUrl: current } : {},
           });
         } else if (error.status !== 401) {

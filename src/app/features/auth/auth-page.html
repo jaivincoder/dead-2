@@ -1,0 +1,135 @@
+<div id="main" tabindex="-1" class="grid min-h-dvh bg-base md:grid-cols-2">
+  <div class="hidden flex-col justify-between bg-primary p-10 md:flex">
+    <div class="flex items-center gap-2">
+      <span class="text-lg font-bold tracking-tight text-on-primary">Anubis</span>
+      <span class="brand-mark brand-mark-ink">Legal</span>
+    </div>
+    <div>
+      <p class="mb-3 text-2xl font-bold leading-snug text-on-primary">
+        Lessons that stop and ask, so nothing slides past you.
+      </p>
+      <p class="text-sm" style="color: color-mix(in srgb, var(--c-on-primary) 80%, transparent)">
+        Segmented video, full practice exams, and a readiness score that tells you the truth.
+      </p>
+    </div>
+    <span class="font-mono text-[10px]" style="color: color-mix(in srgb, var(--c-on-primary) 60%, transparent)">
+      © 2026 ANUBIS PUBLICATIONS DBA DEAD!
+    </span>
+  </div>
+
+  <div class="flex items-center justify-center p-6">
+    <div class="w-full max-w-sm">
+      <a routerLink="/" class="sub-back mb-6">
+        <ui-icon name="chevron-left" [size]="15" /> Back to site
+      </a>
+      <h1 class="mb-1 text-2xl font-bold">{{ signup() ? 'Create your account' : 'Welcome back' }}</h1>
+      <p class="mb-6 text-sm text-dim">
+        @if (signup()) {
+          Free tier, no card. Pick the state you're testing in — this is set once and can't be changed later.
+        } @else {
+          Log in to pick up where you left off.
+        }
+      </p>
+
+      <form (submit)="submit(); $event.preventDefault()" novalidate>
+        @if (signup()) {
+          <div class="mb-3">
+            <label class="mb-1.5 block text-xs font-semibold" for="full-name">Full name</label>
+            <input
+              id="full-name"
+              class="field"
+              type="text"
+              name="name"
+              autocomplete="name"
+              placeholder="Jordan Ellis"
+              [value]="name()"
+              (input)="name.set($any($event.target).value)"
+            />
+          </div>
+        }
+        <div class="mb-3">
+          <label class="mb-1.5 block text-xs font-semibold" for="email">Email</label>
+          <input
+            id="email"
+            class="field"
+            type="email"
+            name="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            [value]="email()"
+            (input)="email.set($any($event.target).value)"
+          />
+        </div>
+        <div class="mb-3">
+          <label class="mb-1.5 block text-xs font-semibold" for="password">
+            {{ signup() ? 'Create a password' : 'Password' }}
+          </label>
+          <input
+            id="password"
+            class="field"
+            type="password"
+            name="password"
+            [attr.autocomplete]="signup() ? 'new-password' : 'current-password'"
+            placeholder="••••••••"
+            [value]="password()"
+            (input)="password.set($any($event.target).value)"
+          />
+        </div>
+
+        @if (signup()) {
+          <div class="mb-3">
+            <label class="mb-1.5 block text-xs font-semibold" for="state">Your state</label>
+            <div class="relative">
+              <select
+                id="state"
+                class="field appearance-none pr-10"
+                [class.text-dim]="!stateCode()"
+                [value]="stateCode()"
+                (change)="stateCode.set($any($event.target).value)"
+              >
+                <option value="" disabled>Select a state…</option>
+                @for (state of catalog.states; track state.code) {
+                  <option [value]="state.code" [disabled]="!state.ready">
+                    {{ state.name }}{{ state.ready ? '' : ' — coming soon' }}
+                  </option>
+                }
+              </select>
+              <ui-icon
+                name="chevron-down"
+                [size]="16"
+                class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-dim"
+              />
+            </div>
+            <p class="mt-1.5 text-[11px] text-dim">
+              Licensing law is state-specific, so your account is locked to one state. Choose carefully.
+            </p>
+          </div>
+        }
+
+        @if (!signup()) {
+          <button type="button" class="mb-4 text-xs text-accent" (click)="forgot($event)">
+            Forgot your password?
+          </button>
+        }
+
+        <button type="submit" class="btn-primary mt-2 w-full py-2.5 text-sm" [disabled]="!canSubmit()">
+          {{ signup() ? 'Create account' : 'Log in' }}
+        </button>
+      </form>
+
+      <p class="mt-4 text-center text-xs text-dim">
+        {{ signup() ? 'Already have an account? ' : 'New here? ' }}
+        <a
+          class="font-semibold text-accent"
+          [routerLink]="signup() ? '/login' : '/signup'"
+          queryParamsHandling="preserve"
+        >
+          {{ signup() ? 'Log in' : 'Create one free' }}
+        </a>
+      </p>
+      <p class="mt-6 rounded-lg bg-surface-hi px-4 py-2 text-center text-[11px] text-dim">
+        Prototype: any credentials will sign you in.
+      </p>
+    </div>
+  </div>
+</div>

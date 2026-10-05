@@ -5,7 +5,7 @@ import { AuthSession } from './auth-session';
 import { TokenStorage } from './token-storage';
 
 function signInRedirect(router: Router, url: string) {
-  return router.createUrlTree(['/'], {
+  return router.createUrlTree(['/login'], {
     queryParams: { returnUrl: url },
   });
 }

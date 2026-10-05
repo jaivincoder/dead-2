@@ -1,0 +1,38 @@
+<div class="mx-auto max-w-xl">
+  <a routerLink="/app/matching" class="sub-back">
+    <ui-icon name="chevron-left" [size]="15" /> All matching sets
+  </a>
+  @if (set(); as current) {
+    <div class="mb-3 flex items-center justify-between">
+      <span class="text-sm font-bold">{{ current.title }}</span>
+      <span class="font-mono text-xs text-dim">{{ matched().size }} / {{ current.pairs.length }} · {{ moves() }} moves</span>
+    </div>
+    @if (done()) {
+      <article class="panel py-10 text-center">
+        <div class="mb-2 text-3xl font-bold text-success">All matched</div>
+        <p class="mb-6 text-sm text-dim">{{ moves() }} moves. Perfect is {{ current.pairs.length }}.</p>
+        <a routerLink="/app/matching" class="btn-primary inline-block px-5 py-2">Pick another set</a>
+      </article>
+    } @else {
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        @for (tile of tiles(); track tile.key) {
+          <button
+            type="button"
+            class="min-h-16 rounded-lg border p-3 text-xs transition"
+            [disabled]="matched().has(tile.pair)"
+            [style.font-family]="tile.kind === 'term' ? 'DM Mono, monospace' : 'DM Sans, sans-serif'"
+            [style.background]="tileBackground(tile)"
+            [style.color]="tileColor(tile)"
+            [style.border-color]="tileBorder(tile)"
+            [style.opacity]="matched().has(tile.pair) ? 0.6 : 1"
+            (click)="tap(tile)"
+          >
+            {{ tile.label }}
+          </button>
+        }
+      </div>
+    }
+  } @else {
+    <p class="text-sm text-dim">That matching set isn't in the catalog.</p>
+  }
+</div>

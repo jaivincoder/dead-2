@@ -1,23 +1,8 @@
 <a
   href="#main"
-  class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2"
+  class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-surface focus:px-3 focus:py-2 focus:text-ink"
 >
   Skip to content
 </a>
-<div class="flex min-h-dvh flex-col">
-  <app-header />
-  <main id="main" class="relative flex-1" tabindex="-1">
-    @if (loader.routeLoading()) {
-      <div class="absolute inset-0 z-30 grid place-items-center bg-surface/70" role="status">
-        <span class="sr-only">Loading page</span>
-        <span
-          class="size-8 animate-spin rounded-full border-2 border-primary-deep border-r-transparent"
-          aria-hidden="true"
-        ></span>
-      </div>
-    }
-    <router-outlet />
-  </main>
-  <app-footer />
-  <app-toast-host />
-</div>
+<router-outlet [attr.data-theme]="theme.mode()" />
+<app-toast-host />

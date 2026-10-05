@@ -1,0 +1,105 @@
+<div class="mx-auto max-w-xl">
+  <a routerLink="/app/exams" class="sub-back">
+    <ui-icon name="chevron-left" [size]="15" /> All exams
+  </a>
+
+  @if (phase() === 'results') {
+    <article class="panel mb-4 py-8 text-center">
+      <div class="mb-1 font-mono text-[10px] uppercase tracking-widest text-dim">{{ exam()?.title }}</div>
+      <div class="mb-1 text-5xl font-bold" [style.color]="pass(percent())">{{ percent() }}%</div>
+      <div class="text-sm text-dim">
+        {{ correct().length }} of {{ questions().length }} correct · {{ clock(seconds()) }} elapsed
+      </div>
+    </article>
+    @if (missed().length) {
+      <div class="space-y-3">
+        <h2 class="text-sm font-semibold text-danger">Missed questions ({{ missed().length }})</h2>
+        @for (item of missed(); track item.id) {
+          <article class="panel panel-danger">
+            <div class="mb-1 font-mono text-[10px] text-dim">{{ item.id }} · {{ item.topic }}</div>
+            <p class="mb-2 text-sm font-semibold">{{ item.q }}</p>
+            <p class="mb-1 text-xs text-danger">
+              Your answer: {{ answers()[item.id] !== undefined ? item.choices[answers()[item.id]] : '— skipped' }}
+            </p>
+            <p class="mb-2 text-xs text-success">Correct: {{ item.choices[item.answer] }}</p>
+            <p class="text-xs text-dim">{{ item.exp }}</p>
+          </article>
+        }
+      </div>
+    }
+  } @else if (question(); as q) {
+    <div class="mb-3 flex items-center justify-between">
+      <span class="text-sm font-bold">{{ exam()?.title }}</span>
+      <div class="flex gap-3">
+        <span class="font-mono text-xs text-accent">{{ clock(seconds()) }}</span>
+        <span class="font-mono text-xs text-dim">{{ answered() }} / {{ questions().length }}</span>
+      </div>
+    </div>
+    <div class="mb-4 flex flex-wrap gap-1.5">
+      @for (item of questions(); track item.id; let i = $index) {
+        <button
+          type="button"
+          class="size-8 rounded-md font-mono text-xs font-semibold"
+          [attr.aria-label]="'Question ' + (i + 1)"
+          [attr.aria-current]="i === index() ? 'true' : null"
+          [style.background]="i === index() ? 'var(--c-primary)' : answers()[item.id] !== undefined ? 'color-mix(in srgb, var(--c-success) 20%, transparent)' : 'var(--c-surface)'"
+          [style.color]="i === index() ? 'var(--c-on-primary)' : answers()[item.id] !== undefined ? 'var(--c-success)' : 'var(--c-dim)'"
+          [style.border]="flags().has(item.id) ? '2px solid var(--c-warn)' : '2px solid ' + (i === index() || answers()[item.id] !== undefined ? 'transparent' : 'var(--c-card-border)')"
+          (click)="jump(i)"
+        >
+          {{ i + 1 }}
+        </button>
+      }
+    </div>
+    <article class="panel">
+      <div class="mb-3 flex items-start justify-between">
+        <span class="font-mono text-[10px] text-dim">
+          {{ q.id }} · {{ q.topic }}{{ q.bank === 'test' ? ' · TEST BANK' : '' }}
+        </span>
+        <button
+          type="button"
+          class="flex items-center gap-1 rounded px-2 py-1 text-xs"
+          [style.background]="flags().has(q.id) ? 'color-mix(in srgb, var(--c-warn) 20%, transparent)' : 'var(--c-surface-hi)'"
+          [style.color]="flags().has(q.id) ? 'var(--c-warn)' : 'var(--c-dim)'"
+          (click)="toggleFlag(q.id)"
+        >
+          <ui-icon name="flag" [size]="11" [fill]="flags().has(q.id) ? 'currentColor' : null" />
+          {{ flags().has(q.id) ? 'Flagged' : 'Flag' }}
+        </button>
+      </div>
+      <p class="mb-4 font-semibold">{{ q.q }}</p>
+      <div class="space-y-2">
+        @for (choice of q.choices; track $index; let i = $index) {
+          <button
+            type="button"
+            class="choice"
+            [style.background]="marked(answers()[q.id] === i).background"
+            [style.border-color]="marked(answers()[q.id] === i).borderColor"
+            (click)="choose(q.id, i)"
+          >
+            {{ choice }}
+          </button>
+        }
+      </div>
+    </article>
+    <div class="mt-4 flex justify-between gap-2">
+      <button type="button" class="btn-surface px-4 py-2 text-sm" [disabled]="index() === 0" (click)="step(-1)">
+        ← Prev
+      </button>
+      @if (index() < questions().length - 1) {
+        <button type="button" class="btn-surface px-4 py-2 text-sm" (click)="step(1)">Next →</button>
+      }
+      <button
+        type="button"
+        class="ml-auto rounded-lg px-4 py-2 text-sm font-semibold"
+        [style.background]="answered() === questions().length ? 'var(--c-success)' : 'var(--c-surface)'"
+        [style.color]="answered() === questions().length ? '#ffffff' : 'var(--c-warn)'"
+        (click)="submit()"
+      >
+        Submit exam
+      </button>
+    </div>
+  } @else {
+    <p class="text-sm text-dim">That exam isn't in the catalog, or it has no questions yet.</p>
+  }
+</div>

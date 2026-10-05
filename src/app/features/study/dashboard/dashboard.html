@@ -1,0 +1,154 @@
+<div class="mb-5">
+  <h1 class="text-2xl font-bold">Performance</h1>
+  <p class="mt-1 text-sm text-dim">
+    {{ catalog.stateName() }} Law Exam · practice bank only, test-bank items excluded.
+  </p>
+</div>
+
+<div class="mb-3 grid grid-cols-2 gap-3 md:grid-cols-5">
+  <article class="panel col-span-2 flex items-center gap-3 md:col-span-1">
+    <div class="relative size-14 shrink-0">
+      <svg viewBox="0 0 36 36" class="size-14 -rotate-90" aria-hidden="true">
+        <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--c-surface-hi)" stroke-width="3.5" />
+        <circle
+          cx="18"
+          cy="18"
+          r="15.9"
+          fill="none"
+          [attr.stroke]="pass(stats().readiness)"
+          stroke-width="3.5"
+          [attr.stroke-dasharray]="stats().readiness + ' 100'"
+          stroke-linecap="round"
+        />
+      </svg>
+      <div class="absolute inset-0 flex items-center justify-center text-sm font-bold" [style.color]="pass(stats().readiness)">
+        {{ stats().readiness }}
+      </div>
+    </div>
+    <div>
+      <div class="text-xs font-semibold">Readiness</div>
+      <div class="text-[10px] text-dim">accuracy · coverage · last exam</div>
+    </div>
+  </article>
+  <article class="panel">
+    <div class="mb-1 text-[11px] text-dim">Overall accuracy</div>
+    <div class="text-xl font-bold">
+      {{ stats().accuracy }}%
+      <span class="ml-1.5 text-xs font-medium" [style.color]="stats().delta >= 0 ? 'var(--c-success)' : 'var(--c-danger)'">
+        {{ stats().delta >= 0 ? '+' : '' }}{{ stats().delta }} pts
+      </span>
+    </div>
+    <div class="font-mono text-[10px] text-dim">since first session</div>
+  </article>
+  <article class="panel">
+    <div class="mb-1 text-[11px] text-dim">Questions answered</div>
+    <div class="text-xl font-bold">{{ stats().volume }}</div>
+    <div class="font-mono text-[10px] text-dim">{{ stats().sessionCount }} sessions</div>
+  </article>
+  <article class="panel">
+    <div class="mb-1 text-[11px] text-dim">Topic coverage</div>
+    <div class="text-xl font-bold">{{ stats().coverage }}%</div>
+    <div class="font-mono text-[10px] text-dim">of practice bank seen</div>
+  </article>
+  <a routerLink="/app/review" class="panel-link panel-danger">
+    <div class="mb-1 text-[11px] text-dim">Missed — needs review</div>
+    <div class="text-xl font-bold text-danger">{{ stats().missed.length }}</div>
+    <div class="flex items-center gap-1 text-[10px] text-danger">
+      Review now <ui-icon name="arrow-right" [size]="10" />
+    </div>
+  </a>
+</div>
+
+<div class="mb-3 grid gap-3 md:grid-cols-2">
+  <article class="panel">
+    <div class="mb-2 flex items-baseline justify-between">
+      <h2 class="text-sm font-semibold">Accuracy over time</h2>
+      @if (stats().trend.at(-1); as latest) {
+        <span class="font-mono text-[10px] text-primary">LATEST {{ latest.acc }}%</span>
+      }
+    </div>
+    <app-score-chart [points]="accuracyPoints()" color="var(--c-primary)" label="Accuracy over time" />
+  </article>
+  <article class="panel">
+    <div class="mb-2 flex items-baseline justify-between">
+      <h2 class="text-sm font-semibold">Practice exam scores</h2>
+      @if (stats().bestExam !== null) {
+        <span class="font-mono text-[10px] text-success">BEST {{ stats().bestExam }}%</span>
+      }
+    </div>
+    <app-score-chart
+      [points]="examPoints()"
+      color="var(--c-accent)"
+      label="Practice exam scores"
+      [refValue]="75"
+      refLabel="PASS 75"
+    />
+  </article>
+</div>
+
+<div class="mb-3 grid gap-3 md:grid-cols-2">
+  <article class="panel">
+    <h2 class="mb-1 text-sm font-semibold">Topic performance — weakest first</h2>
+    @if (stats().topics[0]; as weakest) {
+      <p class="mb-3 text-[11px] text-dim">
+        Weakest right now: <span class="font-semibold text-danger">{{ weakest.topic }}</span> at {{ weakest.acc }}%.
+      </p>
+    }
+    <div class="space-y-2.5">
+      @for (topic of stats().topics; track topic.topic) {
+        <div>
+          <div class="mb-0.5 flex justify-between text-xs">
+            <span>{{ topic.topic }}</span>
+            <span class="font-mono text-dim">
+              <span [style.color]="tone(topic.acc)">{{ topic.acc }}%</span>
+              · {{ topic.n }} attempts
+            </span>
+          </div>
+          <div class="h-1.5 rounded-full bg-surface-hi">
+            <div class="h-1.5 rounded-full" [style.width.%]="topic.acc" [style.background]="tone(topic.acc)"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </article>
+  <article class="panel">
+    <div class="mb-2 flex items-baseline justify-between gap-3">
+      <h2 class="text-sm font-semibold">Practice volume by session</h2>
+      <span class="flex gap-3 font-mono text-[10px] text-dim">
+        <span class="flex items-center gap-1">
+          <span class="inline-block size-2 rounded-sm bg-primary"></span>EXAM {{ stats().modeSplit.exam || 0 }}
+        </span>
+        <span class="flex items-center gap-1">
+          <span class="inline-block size-2 rounded-sm bg-accent opacity-65"></span>QUIZ {{ stats().modeSplit.quiz || 0 }}
+        </span>
+      </span>
+    </div>
+    <app-session-bars [data]="stats().trend" />
+  </article>
+</div>
+
+<article class="panel mb-3 overflow-x-auto">
+  <h2 class="mb-2 text-sm font-semibold">Recent sessions</h2>
+  <div class="mb-1 grid grid-cols-4 gap-2 border-b border-line pb-1.5 font-mono text-[10px] uppercase tracking-wider text-dim">
+    <span>Date</span><span>Mode</span><span class="text-right">Questions</span><span class="text-right">Accuracy</span>
+  </div>
+  @for (row of recent(); track row.date + row.mode; let last = $last) {
+    <div class="grid grid-cols-4 items-center gap-2 py-1.5 text-xs" [style.border-bottom]="last ? 'none' : '1px solid var(--c-card-border)'">
+      <span class="font-mono text-dim">{{ row.date }}</span>
+      <span>
+        <span class="tag" [style.--tag]="row.mode === 'exam' ? 'var(--c-primary)' : null">{{ row.mode }}</span>
+      </span>
+      <span class="text-right font-mono">{{ row.n }}</span>
+      <span class="text-right font-mono font-semibold" [style.color]="tone(row.acc)">{{ row.acc }}%</span>
+    </div>
+  }
+</article>
+
+<div class="flex flex-wrap gap-2">
+  @for (tool of tools; track tool.path) {
+    <a [routerLink]="tool.path" class="tool-link">
+      <ui-icon [name]="tool.icon" [size]="13" class="text-accent" />
+      {{ tool.label }}
+    </a>
+  }
+</div>

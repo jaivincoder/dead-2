@@ -1,0 +1,123 @@
+<div class="mx-auto max-w-2xl">
+  <a routerLink="/app/video" class="sub-back">
+    <ui-icon name="chevron-left" [size]="15" /> All lessons
+  </a>
+
+  @if (blocked(); as soon) {
+    <h1 class="mb-2 text-lg font-bold">{{ soon.title }}</h1>
+    <p class="text-sm text-dim">This lesson is still in production ({{ soon.est }}). It can't be played yet.</p>
+  } @else if (lesson(); as current) {
+    <div class="mb-2 flex flex-wrap items-center gap-2">
+      <span class="font-mono text-xs text-dim">{{ current.id }}</span>
+      <span class="tag">{{ current.topic }}</span>
+      <span class="tag" style="--tag: var(--c-success)">Practice bank</span>
+    </div>
+    <h1 class="mb-3 text-lg font-bold">{{ current.title }}</h1>
+
+    <div class="player-stage always-dark relative mb-1 overflow-hidden rounded-xl">
+      @if (checkpoint() === null) {
+        <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          <div class="mb-2 font-mono text-[10px] uppercase tracking-widest text-accent">
+            Segment {{ currentSegment() + 1 }} of {{ current.segments.length }}
+          </div>
+          <div class="mb-6 text-xl font-bold">{{ current.segments[currentSegment()].title }}</div>
+          <button
+            type="button"
+            class="play-glow flex size-14 items-center justify-center rounded-full bg-primary text-on-primary transition hover:scale-105"
+            [attr.aria-label]="playing() ? 'Pause' : 'Play'"
+            (click)="togglePlay()"
+          >
+            @if (playing()) {
+              <ui-icon name="pause" [size]="22" fill="currentColor" />
+            } @else {
+              <ui-icon name="play" [size]="22" fill="currentColor" class="ml-[3px]" />
+            }
+          </button>
+          <div class="mt-4 font-mono text-xs text-dim">
+            {{ clock(time()) }} / {{ clock(total()) }} · simulated playback
+          </div>
+        </div>
+      } @else if (prompt(); as question) {
+        <div class="absolute inset-0 overflow-y-auto p-5" style="background: color-mix(in srgb, var(--c-base) 95%, transparent)">
+          <div class="mb-2 font-mono text-[10px] uppercase tracking-widest text-warn">
+            Checkpoint · {{ current.segments[checkpoint()!].title }} · Q{{ qi() + 1 }}/{{ current.segments[checkpoint()!].questions.length }}
+          </div>
+          <p class="mb-3 text-sm font-semibold">{{ question.q }}</p>
+          <div class="space-y-2">
+            @for (choice of question.choices; track $index; let i = $index) {
+              <button
+                type="button"
+                class="choice text-xs"
+                [disabled]="picked() !== null"
+                [style.background]="look(i, question.answer, picked()).background"
+                [style.border-color]="look(i, question.answer, picked()).borderColor"
+                (click)="answer(i)"
+              >
+                {{ choice }}
+              </button>
+            }
+          </div>
+          @if (picked() !== null) {
+            <p class="mt-3 text-xs text-dim">
+              <span class="font-semibold" [style.color]="picked() === question.answer ? 'var(--c-success)' : 'var(--c-danger)'">
+                {{ picked() === question.answer ? 'Correct. ' : 'Not quite. ' }}
+              </span>
+              {{ question.exp }}
+            </p>
+            <button type="button" class="btn-primary mt-3 px-4 py-2 text-sm" (click)="resume()">
+              {{ qi() + 1 < current.segments[checkpoint()!].questions.length ? 'Next question' : 'Resume video →' }}
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="mb-1 flex gap-1" role="group" aria-label="Chapter scrubber">
+      @for (segment of current.segments; track segment.title; let i = $index) {
+        <button
+          type="button"
+          class="relative h-2 overflow-hidden rounded-full bg-surface-hi"
+          [style.flex]="segment.duration"
+          [attr.aria-label]="'Play ' + segment.title"
+          (click)="jump(i)"
+        >
+          <span
+            class="absolute inset-y-0 left-0 rounded-full"
+            [style.width.%]="progress(i) * 100"
+            [style.background]="passed().has(i) ? 'var(--c-success)' : 'var(--c-accent)'"
+          ></span>
+        </button>
+      }
+    </div>
+    <div class="mb-4 flex justify-between font-mono text-[10px] text-dim">
+      <span>{{ clock(time()) }}</span>
+      <span>{{ clock(total()) }}</span>
+    </div>
+
+    <div class="space-y-1.5">
+      @for (segment of current.segments; track segment.title; let i = $index) {
+        <button
+          type="button"
+          class="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-sm"
+          [style.background]="i === currentSegment() ? 'var(--c-surface-hi)' : 'var(--c-surface)'"
+          [style.border-color]="i === currentSegment() ? 'color-mix(in srgb, var(--c-accent) 40%, transparent)' : 'var(--c-card-border)'"
+          (click)="jump(i)"
+        >
+          <span class="flex items-center gap-2">
+            <span class="flex font-mono text-xs" [style.color]="passed().has(i) ? 'var(--c-success)' : 'var(--c-dim)'">
+              @if (passed().has(i)) {
+                <ui-icon name="check" [size]="13" />
+              } @else {
+                {{ (i + 1).toString().padStart(2, '0') }}
+              }
+            </span>
+            {{ segment.title }}
+          </span>
+          <span class="font-mono text-xs text-dim">{{ clock(segment.duration) }} · {{ segment.questions.length }} Q</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <p class="text-sm text-dim">That lesson isn't in the catalog.</p>
+  }
+</div>

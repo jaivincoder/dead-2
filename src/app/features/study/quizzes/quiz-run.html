@@ -1,0 +1,61 @@
+<div class="mx-auto max-w-xl">
+  <a routerLink="/app/quizzes" class="sub-back">
+    <ui-icon name="chevron-left" [size]="15" /> All quizzes
+  </a>
+
+  @if (done()) {
+    <article class="panel py-10 text-center">
+      <div
+        class="mb-2 text-4xl font-bold"
+        [style.color]="questions().length && score() / questions().length >= 0.8 ? 'var(--c-success)' : 'var(--c-warn)'"
+      >
+        {{ score() }} / {{ questions().length }}
+      </div>
+      <p class="mb-6 text-sm text-dim">
+        {{ quiz()?.title }} ·
+        {{ questions().length && score() / questions().length >= 0.8 ? 'Strong round.' : 'Review the misses and run it again.' }}
+      </p>
+      <a routerLink="/app/quizzes" class="btn-primary inline-block px-5 py-2">Back to quizzes</a>
+    </article>
+  } @else if (question(); as q) {
+    <div class="mb-2 flex items-center justify-between">
+      <span class="font-mono text-xs text-dim">{{ q.id }} · {{ q.topic }}</span>
+      <span class="font-mono text-xs text-accent">{{ index() + 1 }} / {{ questions().length }}</span>
+    </div>
+    <div class="mb-3 h-1 rounded-full bg-surface-hi">
+      <div class="h-1 rounded-full bg-accent transition-all" [style.width.%]="progress()"></div>
+    </div>
+    <article class="panel">
+      <p class="mb-4 font-semibold">{{ q.q }}</p>
+      <div class="space-y-2">
+        @for (choice of q.choices; track choice; let i = $index) {
+          <button
+            type="button"
+            class="choice"
+            [disabled]="picked() !== null"
+            [style.background]="look(i, q.answer, picked()).background"
+            [style.border-color]="look(i, q.answer, picked()).borderColor"
+            (click)="pick(i)"
+          >
+            {{ choice }}
+          </button>
+        }
+      </div>
+      @if (picked() !== null) {
+        <div class="mt-4 rounded-lg bg-base p-3 text-sm text-dim">
+          <span class="font-semibold" [style.color]="picked() === q.answer ? 'var(--c-success)' : 'var(--c-danger)'">
+            {{ picked() === q.answer ? 'Correct. ' : 'Not quite. ' }}
+          </span>
+          {{ q.exp }}
+        </div>
+      }
+    </article>
+    @if (picked() !== null) {
+      <button type="button" class="btn-primary mt-4 w-full py-2.5" (click)="next()">
+        {{ index() + 1 >= questions().length ? 'See results' : 'Next question →' }}
+      </button>
+    }
+  } @else {
+    <p class="text-sm text-dim">That quiz isn't in the catalog, or it has no questions yet.</p>
+  }
+</div>
