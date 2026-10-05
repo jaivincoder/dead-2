@@ -1,0 +1,22 @@
+<dialog
+  #dialog
+  class="w-[min(32rem,calc(100vw-2rem))]"
+  [attr.aria-labelledby]="titleId()"
+  (cancel)="onCancel($event)"
+>
+  <div class="rounded-2xl bg-white p-5 text-ink shadow-soft sm:p-6">
+    <div class="flex items-start justify-between gap-4">
+      <h2 [id]="titleId()" class="text-lg font-semibold">{{ title() }}</h2>
+      <button
+        type="button"
+        class="rounded-lg px-2 py-1 text-sm font-semibold text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-deep"
+        (click)="closed.emit()"
+      >
+        Close
+      </button>
+    </div>
+    <div class="mt-4 text-sm leading-6">
+      <ng-content />
+    </div>
+  </div>
+</dialog>

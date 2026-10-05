@@ -1,0 +1,29 @@
+<div class="overflow-x-auto rounded-2xl border border-border bg-white">
+  <table class="w-full min-w-[32rem] border-collapse text-left text-sm">
+    <caption class="sr-only">
+      {{
+        caption()
+      }}
+    </caption>
+    <thead>
+      <tr class="border-b border-border bg-surface">
+        @for (column of columns(); track column.key) {
+          <th scope="col" class="px-4 py-3 font-semibold">{{ column.header }}</th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track track(row, $index)) {
+        <tr class="border-b border-border last:border-b-0">
+          @for (column of columns(); track column.key) {
+            <td class="px-4 py-3">{{ cell(row, column.key) }}</td>
+          }
+        </tr>
+      } @empty {
+        <tr>
+          <td class="px-4 py-6 text-muted" [attr.colspan]="columns().length">Nothing here.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

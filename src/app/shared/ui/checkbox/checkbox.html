@@ -1,0 +1,14 @@
+<label class="inline-flex items-center gap-2 text-sm font-semibold">
+  <input
+    class="size-5 accent-primary-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-deep"
+    type="checkbox"
+    [id]="inputId() ?? null"
+    [name]="name()"
+    [checked]="checked()"
+    [disabled]="disabled()"
+    [attr.aria-invalid]="invalid() ? 'true' : null"
+    [attr.aria-describedby]="describedBy() ?? null"
+    (change)="onToggle($event)"
+  />
+  <span><ng-content /></span>
+</label>
