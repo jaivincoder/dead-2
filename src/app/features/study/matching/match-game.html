@@ -19,8 +19,9 @@
           <button
             type="button"
             class="min-h-16 rounded-lg border p-3 text-xs transition"
+            [class.font-mono]="tile.kind === 'term'"
+            [class.font-sans]="tile.kind !== 'term'"
             [disabled]="matched().has(tile.pair)"
-            [style.font-family]="tile.kind === 'term' ? 'DM Mono, monospace' : 'DM Sans, sans-serif'"
             [style.background]="tileBackground(tile)"
             [style.color]="tileColor(tile)"
             [style.border-color]="tileBorder(tile)"

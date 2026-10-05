@@ -55,18 +55,9 @@
       <p class="text-xs text-dim">No card required · Companion to the DEAD! exam prep platform</p>
     </div>
 
-    <div
-      class="always-dark overflow-hidden rounded-2xl shadow-2xl"
-      style="border: 1px solid color-mix(in srgb, var(--c-primary) 27%, transparent)"
-    >
-      <div
-        class="relative min-h-[420px] sm:aspect-[16/10] sm:min-h-0"
-        style="background: radial-gradient(120% 130% at 50% 0%, #2a2312 0%, #0b0906 62%)"
-      >
-        <div
-          class="absolute inset-0 flex flex-col justify-center p-5 sm:p-6"
-          style="background: color-mix(in srgb, var(--c-base) 91%, transparent)"
-        >
+    <div class="always-dark stage-frame overflow-hidden rounded-2xl shadow-2xl">
+      <div class="stage-fill relative min-h-[420px] sm:aspect-[16/10] sm:min-h-0">
+        <div class="absolute inset-0 flex flex-col justify-center bg-scrim p-5 sm:p-6">
           <p class="mb-2 font-mono text-[10px] uppercase tracking-widest text-primary">
             Checkpoint · Trusting the funds · Q1/1
           </p>
@@ -74,9 +65,11 @@
           <div class="space-y-1.5">
             @for (choice of heroChoices; track choice; let i = $index) {
               <div
-                class="flex items-center justify-between rounded-lg px-3 py-2 text-xs"
-                [style.background]="i === 1 ? 'color-mix(in srgb, var(--c-success) 13%, transparent)' : 'var(--c-surface)'"
-                [style.border]="i === 1 ? '1px solid var(--c-success)' : '1px solid transparent'"
+                class="flex items-center justify-between rounded-lg border px-3 py-2 text-xs"
+                [class.border-success]="i === 1"
+                [class.bg-success-soft]="i === 1"
+                [class.border-transparent]="i !== 1"
+                [class.bg-surface]="i !== 1"
               >
                 {{ choice }}
                 @if (i === 1) {
@@ -91,13 +84,14 @@
           </p>
         </div>
       </div>
-      <div class="flex gap-1 px-3 py-2.5" style="background: #0b0906">
+      <div class="flex gap-1 bg-stage-to px-3 py-2.5">
         @for (segment of heroSegments; track $index) {
           <span class="h-1.5 overflow-hidden rounded-full bg-surface-hi" [style.flex]="segment.flex">
             <span
               class="block h-full rounded-full"
+              [class.bg-success]="segment.done"
+              [class.bg-primary]="!segment.done"
               [style.width]="segment.width"
-              [style.background]="segment.done ? 'var(--c-success)' : 'var(--c-primary)'"
             ></span>
           </span>
         }
@@ -130,8 +124,7 @@
       @for (tool of tools; track tool.label) {
         <div class="flex gap-3">
           <span
-            class="flex size-8 shrink-0 items-center justify-center rounded-lg text-accent"
-            style="background: color-mix(in srgb, var(--c-accent) 10%, transparent)"
+            class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-tint text-accent"
           >
             <ui-icon [name]="tool.icon" [size]="15" />
           </span>
@@ -231,7 +224,7 @@
       <h2 class="mb-2 text-2xl font-bold text-on-primary sm:text-3xl">
         The law portion is the one you can actually study for.
       </h2>
-      <p class="mx-auto mb-6 max-w-md text-sm" style="color: color-mix(in srgb, var(--c-on-primary) 80%, transparent)">
+      <p class="mx-auto mb-6 max-w-md text-sm text-on-primary-muted">
         Start with the free tier. Pick your state, watch one lesson, and see where your readiness score lands.
       </p>
       <a routerLink="/signup" class="inline-block rounded-lg bg-on-primary px-6 py-3 text-sm font-semibold text-primary">

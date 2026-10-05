@@ -42,7 +42,7 @@
           class="size-8 rounded-md font-mono text-xs font-semibold"
           [attr.aria-label]="'Question ' + (i + 1)"
           [attr.aria-current]="i === index() ? 'true' : null"
-          [style.background]="i === index() ? 'var(--c-primary)' : answers()[item.id] !== undefined ? 'color-mix(in srgb, var(--c-success) 20%, transparent)' : 'var(--c-surface)'"
+          [style.background]="i === index() ? 'var(--c-primary)' : answers()[item.id] !== undefined ? 'var(--c-success-glow)' : 'var(--c-surface)'"
           [style.color]="i === index() ? 'var(--c-on-primary)' : answers()[item.id] !== undefined ? 'var(--c-success)' : 'var(--c-dim)'"
           [style.border]="flags().has(item.id) ? '2px solid var(--c-warn)' : '2px solid ' + (i === index() || answers()[item.id] !== undefined ? 'transparent' : 'var(--c-card-border)')"
           (click)="jump(i)"
@@ -59,7 +59,7 @@
         <button
           type="button"
           class="flex items-center gap-1 rounded px-2 py-1 text-xs"
-          [style.background]="flags().has(q.id) ? 'color-mix(in srgb, var(--c-warn) 20%, transparent)' : 'var(--c-surface-hi)'"
+          [style.background]="flags().has(q.id) ? 'var(--c-warn-glow)' : 'var(--c-surface-hi)'"
           [style.color]="flags().has(q.id) ? 'var(--c-warn)' : 'var(--c-dim)'"
           (click)="toggleFlag(q.id)"
         >
@@ -93,7 +93,7 @@
         type="button"
         class="ml-auto rounded-lg px-4 py-2 text-sm font-semibold"
         [style.background]="answered() === questions().length ? 'var(--c-success)' : 'var(--c-surface)'"
-        [style.color]="answered() === questions().length ? '#ffffff' : 'var(--c-warn)'"
+        [style.color]="answered() === questions().length ? 'var(--c-on-solid)' : 'var(--c-warn)'"
         (click)="submit()"
       >
         Submit exam

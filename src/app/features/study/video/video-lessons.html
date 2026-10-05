@@ -11,7 +11,7 @@
       @if (lesson.comingSoon) {
         <article class="library-card is-locked flex items-stretch gap-4 opacity-60">
           <div class="video-thumb flex w-32 shrink-0 items-center justify-center rounded-lg sm:w-40">
-            <span class="flex size-9 items-center justify-center rounded-full" style="background: #2a2517; color: #a79c82">
+            <span class="flex size-9 items-center justify-center rounded-full bg-stage-hi text-stage-dim">
               <ui-icon name="play" [size]="15" fill="currentColor" class="ml-0.5" />
             </span>
           </div>
@@ -19,7 +19,7 @@
             <div class="mb-1 flex flex-wrap items-center gap-2">
               <span class="font-mono text-[10px] text-dim">{{ lesson.id }}</span>
               <span class="tag">{{ lesson.topic }}</span>
-              <span class="tag" style="--tag: var(--c-warn)">Coming soon</span>
+              <span class="tag tag-warn">Coming soon</span>
             </div>
             <div class="mb-1 text-sm font-bold">{{ lesson.title }}</div>
             <div class="font-mono text-[10px] text-dim">{{ lengthLabel(lesson) }}</div>

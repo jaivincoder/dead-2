@@ -46,7 +46,7 @@ import { shuffle } from '../util';
               </div>
               <div class="flip-face flip-face-back bg-primary text-on-primary">
                 <div>
-                  <div class="mb-3 font-mono text-[10px] uppercase tracking-widest" style="color: color-mix(in srgb, var(--c-on-primary) 67%, transparent)">
+                  <div class="mb-3 font-mono text-[10px] uppercase tracking-widest text-on-primary-dim">
                     Answer
                   </div>
                   <div class="text-base">{{ face.back }}</div>

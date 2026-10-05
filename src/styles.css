@@ -2,65 +2,192 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+  Global controls. Change a value here and Tailwind utilities
+  (bg-primary, text-ink, rounded-lg, …) plus component classes follow.
+  Do not hard-code brand hex or tint mixes in templates.
+*/
 :root {
-  --c-base: #fbf9f4;
-  --c-surface: #ffffff;
-  --c-surface-hi: #f2ecdd;
-  --c-card-border: #e6dfcc;
-  --c-primary: #c9a227;
-  --c-on-primary: #1a1509;
-  --c-accent: #0e7c6b;
-  --c-success: #1f8a5b;
-  --c-danger: #b03a48;
-  --c-warn: #a85a0b;
-  --c-text: #1a1509;
-  --c-dim: #7a7059;
-  --c-nav: #ffffff;
+  --palette-base-light: #fbf9f4;
+  --palette-surface-light: #ffffff;
+  --palette-surface-hi-light: #f2ecdd;
+  --palette-line-light: #e6dfcc;
+  --palette-primary-light: #c9a227;
+  --palette-on-primary-light: #1a1509;
+  --palette-accent-light: #0e7c6b;
+  --palette-success-light: #1f8a5b;
+  --palette-danger-light: #b03a48;
+  --palette-warn-light: #a85a0b;
+  --palette-text-light: #1a1509;
+  --palette-dim-light: #7a7059;
+  --palette-nav-light: #ffffff;
+
+  --palette-base-dark: #12100a;
+  --palette-surface-dark: #1d1a11;
+  --palette-surface-hi-dark: #2a2517;
+  --palette-line-dark: #332c1c;
+  --palette-primary-dark: #e0b437;
+  --palette-on-primary-dark: #16120a;
+  --palette-accent-dark: #4fc7b0;
+  --palette-success-dark: #3fbe84;
+  --palette-danger-dark: #f0697c;
+  --palette-warn-dark: #e39a3b;
+  --palette-text-dark: #f7f3e8;
+  --palette-dim-dark: #a79c82;
+  --palette-nav-dark: #17140d;
+
+  --mix-wash: 8%;
+  --mix-tint: 10%;
+  --mix-soft: 13%;
+  --mix-glow: 20%;
+  --mix-line: 27%;
+  --mix-line-strong: 33%;
+  --mix-line-bold: 40%;
+  --mix-ink-60: 60%;
+  --mix-ink-67: 67%;
+  --mix-ink-80: 80%;
+  --mix-scrim: 91%;
+  --mix-overlay: 95%;
+
+  --stage-from: #2a2312;
+  --stage-to: #0b0906;
+  --stage-fill: radial-gradient(120% 130% at 50% 0%, var(--stage-from) 0%, var(--stage-to) 62%);
+  --stage-thumb: radial-gradient(120% 130% at 50% 0%, var(--stage-from) 0%, var(--stage-to) 70%);
+
+  --shape-sm: 0.25rem;
+  --shape-md: 0.375rem;
+  --shape-lg: 0.5rem;
+  --shape-xl: 0.75rem;
+  --shape-2xl: 1rem;
+
+  --font-sans-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono-family: 'DM Mono', ui-monospace, monospace;
+  --text-tiny-size: 0.8125rem;
+  --text-lsm-size: 0.9375rem;
+
+  --shadow-soft-value: 0.5px 1.5px 9px #8f8f8f2e;
+  --kit-primary-deep: #1d308c;
+  --kit-primary-ink: #011788;
+  --c-on-solid: #ffffff;
+  --header-offset: 5rem;
+
+  --c-base: var(--palette-base-light);
+  --c-surface: var(--palette-surface-light);
+  --c-surface-hi: var(--palette-surface-hi-light);
+  --c-card-border: var(--palette-line-light);
+  --c-primary: var(--palette-primary-light);
+  --c-on-primary: var(--palette-on-primary-light);
+  --c-accent: var(--palette-accent-light);
+  --c-success: var(--palette-success-light);
+  --c-danger: var(--palette-danger-light);
+  --c-warn: var(--palette-warn-light);
+  --c-text: var(--palette-text-light);
+  --c-dim: var(--palette-dim-light);
+  --c-nav: var(--palette-nav-light);
   color-scheme: light;
 }
 
+html.dark,
+.always-dark {
+  --c-base: var(--palette-base-dark);
+  --c-surface: var(--palette-surface-dark);
+  --c-surface-hi: var(--palette-surface-hi-dark);
+  --c-card-border: var(--palette-line-dark);
+  --c-primary: var(--palette-primary-dark);
+  --c-on-primary: var(--palette-on-primary-dark);
+  --c-accent: var(--palette-accent-dark);
+  --c-success: var(--palette-success-dark);
+  --c-danger: var(--palette-danger-dark);
+  --c-warn: var(--palette-warn-dark);
+  --c-text: var(--palette-text-dark);
+  --c-dim: var(--palette-dim-dark);
+  --c-nav: var(--palette-nav-dark);
+}
+
 html.dark {
-  --c-base: #12100a;
-  --c-surface: #1d1a11;
-  --c-surface-hi: #2a2517;
-  --c-card-border: #332c1c;
-  --c-primary: #e0b437;
-  --c-on-primary: #16120a;
-  --c-accent: #4fc7b0;
-  --c-success: #3fbe84;
-  --c-danger: #f0697c;
-  --c-warn: #e39a3b;
-  --c-text: #f7f3e8;
-  --c-dim: #a79c82;
-  --c-nav: #17140d;
   color-scheme: dark;
 }
 
+:root {
+  --c-primary-wash: color-mix(in srgb, var(--c-primary) var(--mix-tint), transparent);
+  --c-primary-soft: color-mix(in srgb, var(--c-primary) var(--mix-soft), transparent);
+  --c-primary-line: color-mix(in srgb, var(--c-primary) var(--mix-line), transparent);
+  --c-primary-line-strong: color-mix(in srgb, var(--c-primary) var(--mix-line-strong), transparent);
+  --c-primary-line-bold: color-mix(in srgb, var(--c-primary) var(--mix-line-bold), transparent);
+  --c-accent-wash: color-mix(in srgb, var(--c-accent) var(--mix-wash), transparent);
+  --c-accent-tint: color-mix(in srgb, var(--c-accent) var(--mix-tint), transparent);
+  --c-accent-line: color-mix(in srgb, var(--c-accent) var(--mix-line-strong), transparent);
+  --c-accent-line-bold: color-mix(in srgb, var(--c-accent) var(--mix-line-bold), transparent);
+  --c-success-soft: color-mix(in srgb, var(--c-success) var(--mix-soft), transparent);
+  --c-success-glow: color-mix(in srgb, var(--c-success) var(--mix-glow), transparent);
+  --c-danger-soft: color-mix(in srgb, var(--c-danger) var(--mix-soft), transparent);
+  --c-danger-glow: color-mix(in srgb, var(--c-danger) var(--mix-glow), transparent);
+  --c-danger-line: color-mix(in srgb, var(--c-danger) var(--mix-line), transparent);
+  --c-warn-glow: color-mix(in srgb, var(--c-warn) var(--mix-glow), transparent);
+  --c-on-primary-60: color-mix(in srgb, var(--c-on-primary) var(--mix-ink-60), transparent);
+  --c-on-primary-67: color-mix(in srgb, var(--c-on-primary) var(--mix-ink-67), transparent);
+  --c-on-primary-80: color-mix(in srgb, var(--c-on-primary) var(--mix-ink-80), transparent);
+  --c-on-primary-line: color-mix(in srgb, var(--c-on-primary) var(--mix-line-bold), transparent);
+  --c-base-scrim: color-mix(in srgb, var(--c-base) var(--mix-scrim), transparent);
+  --c-base-overlay: color-mix(in srgb, var(--c-base) var(--mix-overlay), transparent);
+  --c-nav-glass: color-mix(in srgb, var(--c-nav) var(--mix-overlay), transparent);
+  --c-stage-line: color-mix(in srgb, var(--palette-primary-dark) var(--mix-line), transparent);
+  --shadow-play: 0 0 32px var(--c-primary-line-bold);
+}
+
 @theme inline {
-  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'DM Mono', ui-monospace, monospace;
-  --text-tiny: 0.8125rem;
+  --font-sans: var(--font-sans-family);
+  --font-mono: var(--font-mono-family);
+  --text-tiny: var(--text-tiny-size);
   --text-tiny--line-height: 1.25rem;
-  --text-lsm: 0.9375rem;
+  --text-lsm: var(--text-lsm-size);
   --text-lsm--line-height: 1.5rem;
+  --radius-sm: var(--shape-sm);
+  --radius-md: var(--shape-md);
+  --radius-lg: var(--shape-lg);
+  --radius-xl: var(--shape-xl);
+  --radius-2xl: var(--shape-2xl);
   --color-base: var(--c-base);
   --color-surface: var(--c-surface);
   --color-surface-hi: var(--c-surface-hi);
   --color-line: var(--c-card-border);
   --color-primary: var(--c-primary);
+  --color-primary-wash: var(--c-primary-wash);
+  --color-primary-soft: var(--c-primary-soft);
+  --color-primary-line: var(--c-primary-line);
+  --color-primary-line-strong: var(--c-primary-line-strong);
   --color-on-primary: var(--c-on-primary);
+  --color-on-primary-faint: var(--c-on-primary-60);
+  --color-on-primary-dim: var(--c-on-primary-67);
+  --color-on-primary-muted: var(--c-on-primary-80);
+  --color-on-solid: var(--c-on-solid);
   --color-accent: var(--c-accent);
+  --color-accent-wash: var(--c-accent-wash);
+  --color-accent-tint: var(--c-accent-tint);
+  --color-accent-line: var(--c-accent-line);
+  --color-accent-line-bold: var(--c-accent-line-bold);
   --color-success: var(--c-success);
+  --color-success-soft: var(--c-success-soft);
+  --color-success-glow: var(--c-success-glow);
   --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-danger-glow: var(--c-danger-glow);
+  --color-danger-line: var(--c-danger-line);
   --color-warn: var(--c-warn);
+  --color-warn-glow: var(--c-warn-glow);
   --color-ink: var(--c-text);
   --color-dim: var(--c-dim);
   --color-nav: var(--c-nav);
+  --color-scrim: var(--c-base-scrim);
+  --color-overlay: var(--c-base-overlay);
+  --color-stage-to: var(--stage-to);
+  --color-stage-hi: var(--palette-surface-hi-dark);
+  --color-stage-dim: var(--palette-dim-dark);
   --color-muted: var(--c-dim);
   --color-border: var(--c-card-border);
-  --color-primary-deep: #1d308c;
-  --color-primary-ink: #011788;
-  --shadow-soft: 0.5px 1.5px 9px #8f8f8f2e;
+  --color-primary-deep: var(--kit-primary-deep);
+  --color-primary-ink: var(--kit-primary-ink);
+  --shadow-soft: var(--shadow-soft-value);
 }
 
 html {
@@ -119,7 +246,7 @@ dialog::backdrop {
 
 @layer components {
 .anchor-section {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: var(--header-offset);
 }
 
 .tag {
@@ -131,8 +258,16 @@ dialog::backdrop {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--tag, var(--c-accent));
-  border: 1px solid color-mix(in srgb, var(--tag, var(--c-accent)) 33%, transparent);
-  background: color-mix(in srgb, var(--tag, var(--c-accent)) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tag, var(--c-accent)) var(--mix-line-strong), transparent);
+  background: color-mix(in srgb, var(--tag, var(--c-accent)) var(--mix-wash), transparent);
+}
+
+.tag-success {
+  --tag: var(--c-success);
+}
+
+.tag-warn {
+  --tag: var(--c-warn);
 }
 
 .brand-mark {
@@ -148,28 +283,28 @@ dialog::backdrop {
 .brand-mark-gold {
   color: var(--c-primary);
   border: 1px solid var(--c-primary);
-  background: color-mix(in srgb, var(--c-primary) 10%, transparent);
+  background: var(--c-primary-wash);
 }
 
 .brand-mark-teal {
   color: var(--c-accent);
-  border: 1px solid color-mix(in srgb, var(--c-accent) 33%, transparent);
-  background: color-mix(in srgb, var(--c-accent) 8%, transparent);
+  border: 1px solid var(--c-accent-line);
+  background: var(--c-accent-wash);
 }
 
 .brand-mark-ink {
   color: var(--c-on-primary);
-  border: 1px solid color-mix(in srgb, var(--c-on-primary) 40%, transparent);
+  border: 1px solid var(--c-on-primary-line);
 }
 
 .marketing-nav {
-  background: color-mix(in srgb, var(--c-nav) 95%, transparent);
+  background: var(--c-nav-glass);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--c-card-border);
 }
 
 .panel {
-  border-radius: 0.75rem;
+  border-radius: var(--shape-xl);
   padding: 1rem;
   background: var(--c-surface);
   border: 1px solid var(--c-card-border);
@@ -180,7 +315,7 @@ dialog::backdrop {
 }
 
 .panel-danger {
-  border-color: color-mix(in srgb, var(--c-danger) 27%, transparent);
+  border-color: var(--c-danger-line);
 }
 
 .library-card,
@@ -190,14 +325,14 @@ dialog::backdrop {
   text-align: left;
   text-decoration: none;
   color: inherit;
-  border-radius: 0.75rem;
+  border-radius: var(--shape-xl);
   padding: 1rem;
   background: var(--c-surface);
   transition: filter 0.15s ease;
 }
 
 .library-card {
-  border: 1px solid color-mix(in srgb, var(--c-primary) 33%, transparent);
+  border: 1px solid var(--c-primary-line-strong);
 }
 
 .panel-link {
@@ -226,8 +361,8 @@ dialog::backdrop {
   justify-content: center;
   width: 2rem;
   height: 2rem;
-  border-radius: 0.5rem;
-  background: color-mix(in srgb, var(--c-primary) 13%, transparent);
+  border-radius: var(--shape-lg);
+  background: var(--c-primary-soft);
   color: var(--c-accent);
 }
 
@@ -237,9 +372,9 @@ dialog::backdrop {
   height: 2.5rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.75rem;
+  border-radius: var(--shape-xl);
   margin-bottom: 0.75rem;
-  background: color-mix(in srgb, var(--c-primary) 13%, transparent);
+  background: var(--c-primary-soft);
   color: var(--c-primary);
 }
 
@@ -248,7 +383,7 @@ dialog::backdrop {
   align-items: center;
   gap: 0.375rem;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-size: 0.75rem;
   font-weight: 500;
   text-decoration: none;
@@ -270,7 +405,7 @@ dialog::backdrop {
 .btn-primary {
   background: var(--c-primary);
   color: var(--c-on-primary);
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-weight: 600;
 }
 
@@ -283,7 +418,7 @@ dialog::backdrop {
   background: var(--c-surface);
   color: var(--c-text);
   border: 1px solid var(--c-card-border);
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
 }
 
 .btn-surface:disabled {
@@ -295,13 +430,13 @@ dialog::backdrop {
   background: var(--c-surface-hi);
   color: var(--c-text);
   border: 1px solid var(--c-card-border);
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-weight: 600;
 }
 
 .field {
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   padding: 0.625rem 0.75rem;
   font-size: 0.875rem;
   background: var(--c-surface);
@@ -314,7 +449,7 @@ dialog::backdrop {
   width: 100%;
   text-align: left;
   padding: 0.625rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-size: 0.875rem;
   color: var(--c-text);
   border: 1px solid transparent;
@@ -329,7 +464,7 @@ dialog::backdrop {
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.625rem;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-size: 0.875rem;
   font-weight: 500;
   white-space: nowrap;
@@ -340,9 +475,9 @@ dialog::backdrop {
 }
 
 .study-nav-link.nav-feature {
-  background: color-mix(in srgb, var(--c-primary) 10%, transparent);
+  background: var(--c-primary-wash);
   color: var(--c-accent);
-  border-color: color-mix(in srgb, var(--c-accent) 33%, transparent);
+  border-color: var(--c-accent-line);
 }
 
 .study-nav-link.nav-on {
@@ -354,7 +489,7 @@ dialog::backdrop {
 .new-badge {
   font-family: var(--font-mono);
   background: var(--c-accent);
-  color: #fff;
+  color: var(--c-on-solid);
   font-size: 9px;
   padding: 1px 4px;
   border-radius: 4px;
@@ -367,54 +502,49 @@ dialog::backdrop {
   align-items: center;
   gap: 0.25rem;
   padding: 0.375rem 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   flex-shrink: 0;
-  background: color-mix(in srgb, var(--c-primary) 13%, transparent);
+  background: var(--c-primary-soft);
   color: var(--c-text);
-  border: 1px solid color-mix(in srgb, var(--c-primary) 40%, transparent);
+  border: 1px solid var(--c-primary-line-bold);
 }
 
 .icon-btn {
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--shape-lg);
   background: var(--c-surface-hi);
   color: var(--c-text);
 }
 
 .always-dark {
-  --c-base: #12100a;
-  --c-surface: #1d1a11;
-  --c-surface-hi: #2a2517;
-  --c-card-border: #332c1c;
-  --c-primary: #e0b437;
-  --c-on-primary: #16120a;
-  --c-accent: #4fc7b0;
-  --c-success: #3fbe84;
-  --c-danger: #f0697c;
-  --c-warn: #e39a3b;
-  --c-text: #f7f3e8;
-  --c-dim: #a79c82;
-  --c-nav: #17140d;
   color: var(--c-text);
+}
+
+.stage-fill {
+  background: var(--stage-fill);
+}
+
+.stage-frame {
+  border: 1px solid var(--c-stage-line);
 }
 
 .player-stage {
   width: 100%;
-  background: radial-gradient(120% 130% at 50% 0%, #2a2312 0%, #0b0906 62%);
-  border: 1px solid color-mix(in srgb, #e0b437 27%, transparent);
+  background: var(--stage-fill);
+  border: 1px solid var(--c-stage-line);
   aspect-ratio: 16 / 9;
   min-height: 280px;
 }
 
 .video-thumb {
-  background: radial-gradient(120% 130% at 50% 0%, #2a2312 0%, #0b0906 70%);
+  background: var(--stage-thumb);
   aspect-ratio: 16 / 9;
 }
 
 .play-glow {
-  box-shadow: 0 0 32px color-mix(in srgb, var(--c-primary) 40%, transparent);
+  box-shadow: var(--shadow-play);
 }
 
 .flip-scene {
@@ -441,7 +571,7 @@ dialog::backdrop {
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  border-radius: 1rem;
+  border-radius: var(--shape-2xl);
   padding: 2rem;
   text-align: center;
 }
@@ -451,6 +581,6 @@ dialog::backdrop {
 }
 
 .panel-link.panel-danger {
-  border-color: color-mix(in srgb, var(--c-danger) 27%, transparent);
+  border-color: var(--c-danger-line);
 }
 }

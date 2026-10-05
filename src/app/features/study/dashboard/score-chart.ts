@@ -108,7 +108,7 @@ export class ScoreChart {
   readonly refLabel = input('');
 
   readonly areaFill = computed(
-    () => `color-mix(in srgb, ${this.color()} 13%, transparent)`,
+    () => `color-mix(in srgb, ${this.color()} var(--mix-soft), transparent)`,
   );
   readonly model = computed(() => buildChart(this.points(), this.refValue()));
 }

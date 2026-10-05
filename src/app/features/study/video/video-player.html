@@ -10,7 +10,7 @@
     <div class="mb-2 flex flex-wrap items-center gap-2">
       <span class="font-mono text-xs text-dim">{{ current.id }}</span>
       <span class="tag">{{ current.topic }}</span>
-      <span class="tag" style="--tag: var(--c-success)">Practice bank</span>
+      <span class="tag tag-success">Practice bank</span>
     </div>
     <h1 class="mb-3 text-lg font-bold">{{ current.title }}</h1>
 
@@ -38,7 +38,7 @@
           </div>
         </div>
       } @else if (prompt(); as question) {
-        <div class="absolute inset-0 overflow-y-auto p-5" style="background: color-mix(in srgb, var(--c-base) 95%, transparent)">
+        <div class="absolute inset-0 overflow-y-auto bg-overlay p-5">
           <div class="mb-2 font-mono text-[10px] uppercase tracking-widest text-warn">
             Checkpoint · {{ current.segments[checkpoint()!].title }} · Q{{ qi() + 1 }}/{{ current.segments[checkpoint()!].questions.length }}
           </div>
@@ -99,8 +99,10 @@
         <button
           type="button"
           class="flex w-full items-center justify-between rounded-lg border px-3 py-2 text-left text-sm"
-          [style.background]="i === currentSegment() ? 'var(--c-surface-hi)' : 'var(--c-surface)'"
-          [style.border-color]="i === currentSegment() ? 'color-mix(in srgb, var(--c-accent) 40%, transparent)' : 'var(--c-card-border)'"
+          [class.border-accent-line-bold]="i === currentSegment()"
+          [class.bg-surface-hi]="i === currentSegment()"
+          [class.border-line]="i !== currentSegment()"
+          [class.bg-surface]="i !== currentSegment()"
           (click)="jump(i)"
         >
           <span class="flex items-center gap-2">

@@ -69,10 +69,10 @@ export class MatchGame {
 
   tileBackground(tile: Tile): string {
     if (this.matched().has(tile.pair)) {
-      return 'color-mix(in srgb, var(--c-success) 12%, transparent)';
+      return 'var(--c-success-soft)';
     }
     if (this.wrong()?.includes(tile.key)) {
-      return 'color-mix(in srgb, var(--c-danger) 20%, transparent)';
+      return 'var(--c-danger-glow)';
     }
     if (this.selected()?.key === tile.key) {
       return 'var(--c-primary)';

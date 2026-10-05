@@ -42,13 +42,13 @@ export interface ChoiceLook {
 export function feedbackChoice(index: number, answer: number, picked: number | null): ChoiceLook {
   if (picked !== null && index === answer) {
     return {
-      background: 'color-mix(in srgb, var(--c-success) 13%, transparent)',
+      background: 'var(--c-success-soft)',
       borderColor: 'var(--c-success)',
     };
   }
   if (picked !== null && index === picked) {
     return {
-      background: 'color-mix(in srgb, var(--c-danger) 13%, transparent)',
+      background: 'var(--c-danger-soft)',
       borderColor: 'var(--c-danger)',
     };
   }
@@ -58,7 +58,7 @@ export function feedbackChoice(index: number, answer: number, picked: number | n
 export function markedChoice(selected: boolean): ChoiceLook {
   return selected
     ? {
-        background: 'color-mix(in srgb, var(--c-primary) 27%, transparent)',
+        background: 'var(--c-primary-line)',
         borderColor: 'var(--c-accent)',
       }
     : { background: 'var(--c-surface-hi)', borderColor: 'transparent' };
